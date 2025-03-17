@@ -1,0 +1,100 @@
+
+.contact_container{
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center; /* Căn giữa nội dung */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+.contact_container .form_container{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-items: center;
+    align-items: stretch; /* Đảm bảo cả video và form có chiều cao bằng nhau */
+    max-height: 600px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.contact_container .form_container .video_col video {
+    width: 100%; /* Để video chiếm toàn bộ chiều rộng */
+    height: 100%;
+    max-width: none; /* Loại bỏ giới hạn chiều rộng */
+    max-height: none; /* Loại bỏ giới hạn chiều cao */
+    object-fit: cover; /* Đảm bảo video lấp đầy phần tử cha */
+}
+.contact_container .form_container .video_col{
+    width: fit-content;
+    max-height: 600px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 50%; /* Giới hạn tối đa 50% form */
+}
+.form_col {
+    width: fit-content;
+    max-width: 500px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px
+}
+
+.form_col h2 {
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form_col label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-top: 10px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.form_col input,
+.form_col textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form_col input:focus,
+.form_col textarea:focus {
+    border-color: #d4af37;
+    outline: none;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.form_col textarea {
+    resize: none;
+    height: 150px;
+}
+
+.form_col .btn {
+    width: 100%;
+    max-width: 200px;
+    height: 40px;
+    background: #d4af37;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: block;
+    margin: 20px auto 0;
+}
+
+.form_col .btn:hover {
+    background: #b89630;
+    transform: scale(1.05);
+}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product_detail.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="detail_container">
+  <div class="small-container single-product">
+    {% with messages = get_flashed_messages()%} {% if messages%} {%for message in
+    messages%}
+    <div class="alert" style="background-color: #d1e7dd">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';"
+        >&times;</span
+      >
+      <strong style="color: rgb(37, 98, 69)">Success! {{message}}</strong>
+      <a href="/cart" style="text-decoration: underline">view cart</a>
+    </div>
+    {%endfor%} {%endif %} {%endwith%}
+    <div class="product-display">
+      <div class="pic_col">
+        <img src="{{product_detail[5]}}" width="100%" id="ProductImg" />
+      </div>
+      <div class="info_col">
+        <p>Home / Guitar</p>
+        <h1>{{product_detail[1]}}</h1>
+        <h4>{{product_detail[6]}}</h4>
+        <h4>Brand: {{product_detail[2]}}</h4>
+        <form
+          action="/cart/add"
+          method="POST"
+          style="display: flex; align-items: center; gap: 1.5rem"
+        >
+          <input type="hidden" name="product_id" value="{{product_detail[0]}}" />
+          <input type="number" name="quantity" step="1" min="1" value="1" />
+          <button type="submit" style="width: 50%; height: 40px" class="btn">
+            Add to cart
+          </button>
+        </form>
+
+        <h3>Product Details <i class="fa fa-indent"></i></h3>
+        <br />
+        <p id="product-detail">{{product_detail[7]}}</p>
+      </div>
+    </div>
+  </div>
+  <!-- title -->
+  <div class="small-container">
+    <div class="row row-2">
+      <h2>Related Products</h2>
+    </div>
+  </div>
+  <!-- Products -->
+  <div class="small-container">
+    <div class="product_display">
+      {% for product in related_products%}
+      <div class="product_card">
+        <a href="/product_detail/{{product[0]}}"><img src="{{ product[5]}}" /></a>
+        <div class="detail">
+          <h4>{{product[1]}}</h4>
+          {%set rate = product[3]|int%}
+          <div class="rating">
+            {%for i in range(0, rate) %}
+            <i class="fa fa-star"></i>
+            {%endfor%} {%for i in range(rate, 5) %}
+            <i class="fa fa-star-o"></i>
+            {%endfor%}
+            <p>{{product[6]}}</p>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+
+{%endblock%}

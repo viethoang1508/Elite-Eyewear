@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block title %}Verve & Co. | Log in{% endblock %}{%
+block content%}{% with messages =
+get_flashed_messages(category_filter=["success"])%} {% if messages%} {%for
+message in messages%}
+<div class="alert" style="background-color: #d1e7dd">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <strong style="color: #256245">{{message}}</strong>
+</div>
+{%endfor%} {%endif %} {%endwith%} {% with errors =
+get_flashed_messages(category_filter=["error"]) %} {% if errors %} {%for msg in
+errors %}
+<div class="alert" style="background-color: #f8d7da">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <p style="color: #a12029">Error: <strong>{{msg}}</strong></p>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+<div class="account-page">
+  <div class="container" style="max-width: 800px;">
+    <div class="form_container">
+      <div class="img_signup">
+        <img class="" src="../static/images/signup.jpg" alt="Feature Image" />
+      </div>
+      <div class="form_col">
+        <div class="form-container">
+          <div class="form-btn">
+            <a href="/login">Login</a>
+            <span> / </span>
+            <a
+              href="/signup"
+              style="border-bottom: 3px solid #5c67f2; padding-bottom: 3px"
+              >Register</a
+            >
+          </div>
+          <div class="form_content">
+            <form method="POST">
+              <h2>Register</h2>
+              <div class="form-group">
+                <label for="username">User Name</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  class="form-control"
+                  placeholder="Enter Username"
+                  required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="Enter Email"
+                  required />
+                <span class="validation">{{ email_error }}</span>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter Password"
+                  required />
+              </div>
+              <button class="btn" type="submit" style="background-color: #4a54e1">
+                Sign Up
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

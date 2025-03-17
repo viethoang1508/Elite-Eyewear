@@ -1,0 +1,39 @@
+.about_container .banner{
+    width: 100;
+}
+.about_container .banner .pic {
+    background-color: #E6D6C7;
+    width: 100%;
+    height: fit-content;
+}
+.about_container .banner img{
+
+}
+.about_container .about_content_container{
+    width: 80%;
+    margin: 0 auto;
+}
+.about_content_container .who_are_we_section, .our_products_section {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.about_content_container .content_col{
+    width: 100%;
+}
+.about_content_container .pic_col {
+    display: flex;
+}
+.about_content_container .pic_col img{
+    width: 80%;
+    margin: 0 auto;
+}
+.about_content_container h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #D4AF37;
+}
+.about_content_container p {
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+    text-size: 1.5rem;
+}

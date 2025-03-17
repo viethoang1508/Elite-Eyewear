@@ -1,0 +1,155 @@
+.banner1 {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.home-content {
+    padding: 0;
+    background-color: white;
+}
+/* Banner 1 */
+.home-content  .banner1 {
+    position: relative;
+    width: 100%;
+    height: 500px; /* Chiều cao cố định cho banner */
+    overflow: hidden; /* Tránh tràn nội dung */
+}
+
+/* Đảm bảo carousel chiếm toàn bộ không gian */
+.home-content #carouselExample {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-color: white;
+}
+
+/* Ảnh trong carousel sẽ căn chỉnh đúng kích thước */
+.home-content .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Giữ hình ảnh không bị méo */
+}
+
+
+/* Nội dung hiển thị phía trên carousel */
+.home-content .banner1 .content {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    color: white;
+    z-index: 2; /* Nằm trên carousel */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.home-content .banner1 .content  h2{
+    font-family: 'Oswald', sans-serif;
+}
+.home-content .banner1 .content  h1{
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+/* Nút "SHOP NOW" */
+.home-content .banner1 .content button {
+    background-color: #D4AF37;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    font-family: 'Oswald', sans-serif;
+}
+
+.home-content .banner1 .content button:hover {
+    background-color: #B8902E;
+    transform: scale(1.1);
+}
+
+/* Đảm bảo phần dưới banner không bị che */
+.home_content {
+    padding-top: 0px;
+    width: 80%;
+    background-color: white;
+    margin: 0 auto;
+}
+
+/* Brands */
+.home_content .brands {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.home_content .brands img {
+    width: 250px;
+    height: 150px;
+}
+
+/*Feature Products*/
+.home_content .small-container .product_card img{
+    width: 100%;
+}
+.home_content .small-container .product_card{
+    width: 23%;
+    transition: transform 0.5s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px lightgray;
+}
+.home_content .small-container .product_display {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+
+}
+.home_content .small-container .product_card:hover {
+    transform:scale(1.05);
+}
+.home_content .small-container h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #D4AF37;
+}
+.home_content .small-container h4 {
+    font-family: 'Oswald', sans-serif;
+}
+/* Hển thị video */
+.home_content .video_section{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+.home_content .video_section video{
+    width: 100%;
+}
+.home_content .video_section .video_content{
+    padding: 15px;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.home_content .video_section .video_content h3 {
+    font-family: 'Oswald', sans-serif;
+    color: #D4AF37;
+}
+.home_content .video_section .video_content p {
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+    text-size: 1.5rem;
+}
+

@@ -1,0 +1,79 @@
+
+
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block title %}Verve & Co. | Log in{% endblock %}{%
+block content%}{% with messages =
+get_flashed_messages(category_filter=["success"])%} {% if messages%} {%for
+message in messages%}
+<div class="alert" style="background-color: #d1e7dd">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <strong style="color: #256245">{{message}}</strong>
+</div>
+{%endfor%} {%endif %} {%endwith%} {% with errors =
+get_flashed_messages(category_filter=["error"]) %} {% if errors %} {%for msg in
+errors %}
+<div class="alert" style="background-color: #f8d7da">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';"
+    >&times;</span
+  >
+  <p style="color: #a12029">Error: <strong>{{msg}}</strong></p>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+<div class="account-page">
+  <div class="container">
+    <div class="form_container">
+      <div class="pic_col">
+        <img src="../static/images/login.jpg" alt="Feature Image" />
+      </div>
+      <div class="form_col">
+        <div class="form-container">
+          <div class="form-btn">
+            <a
+              href="/login"
+              style="border-bottom: 3px solid #5c67f2; padding-bottom: 3px"
+              >Login</a
+            >
+            <span> / </span>
+            <a href="/signup">Register</a>
+          </div>
+          <div class="form_content">
+            <form method="POST">
+            <h2>Login</h2>
+            <div class="form-group">
+              <label for="username">User Name</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="txt_username"
+                  placeholder="Enter Email"
+                  required />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="txt_password"
+                  placeholder="Enter Password"
+                  required />
+              </div>
+              <button class="btn" type="submit">
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

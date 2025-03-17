@@ -1,0 +1,107 @@
+/* Căn giữa toàn bộ trang */
+.account-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: lightgray;
+}
+
+/* Container chính */
+.account-page .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    max-width: 650px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.form_container {
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    width: fit-content;
+}
+.form_container .pic_col{
+    display: flex;
+    width: 50%;
+    margin-right: 10px;
+}
+.form_container .pic_col img{
+    width: 100%;
+    border-radius: 10px;
+    max-width: 300px;
+}
+.form_container .img_signup{
+    display: flex;
+    width: 50%;
+    margin-right: 10px;
+}
+.form_container .img_signup img {
+    width: 100%;
+    height: auto; /* Giữ tỷ lệ ảnh */
+    max-width: 300px; /* Giới hạn kích thước tối đa */
+    border-radius: 10px; /* Bo góc ảnh */
+    object-fit: cover; /* Cắt ảnh để phù hợp khung */
+}
+.form_container .form_col{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    min-width: 400px;
+}
+.form_content h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #D4AF37;
+}
+.form_content label {
+    font-family: 'Oswald', sans-serif;
+}
+.form-group, .form_content{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.form-container .form-btn a{
+    font-family: 'Oswald', sans-serif;
+    color: #D4AF37;
+    text-decoration: none;
+}
+.form_content .btn {
+    width: fit-content;
+    padding: 10px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #D4AF37 !important;
+    margin-top: 10px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.form_content .btn:hover {
+    background-color: #B8902E;
+}
+
+/* Thông báo lỗi và thành công */
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.alert .closebtn {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
