@@ -1,65 +1,90 @@
-{%extends "admin/base.html"%}{% block title%}Admin dashboard{%endblock%} {%
-block content%}
-<div class="small-container cart-page">
-  <h1>Admin Dashboard</h1>
-  {% with messages = get_flashed_messages()%} {% if messages%} {%for message in
-  messages%}
-  <div class="alert" style="background-color: #d1e7dd">
-    <span class="closebtn" onclick="this.parentElement.style.display='none';"
-      >&times;</span
-    >
-    <strong style="color: rgb(37, 98, 69)">Success! {{message}}</strong>
-  </div>
-  {%endfor%} {%endif %} {%endwith%}
-  <button
-    class="btn"
-    style="background-color: rgb(230, 158, 42); cursor: pointer"
-    onclick="window.location.href='/admin/add'"
-  >
-    Add new product &plus;
-  </button>
-  <table>
-    <tr class="table-header">
-      <th>Product</th>
-      <th>Detail</th>
-      <th>Action</th>
-    </tr>
-    {%for storage in storages%}
-    <tr>
-      <td>
-        <div class="cart-info">
-          <img src="{{storage[5]}}" />
-          <p>{{storage[1]}}</p>
-        </div>
-      </td>
-      <td>
-        <div>
-          <p>Rating: {{storage[3]}}</p>
-          <small>Price: {{storage[6]}}</small>
-          <br />
-          <small>Brand: <strong>{{storage[2]}}</strong></small>
-          <br />
-        </div>
-      </td>
-      <td>
-        <form
-          id="delete-form-{{storage[0]}}"
-          action="/admin/delete/{{storage[0]}}"
-          method="post"
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+{% endblock %}
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="dashboard-banner">
+      <h1>Admin Dashboard</h1>
+      {% with messages = get_flashed_messages()%} {% if messages%} {%for message in
+      messages%}
+      <div class="alert" style="background-color: #d1e7dd">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';"
+          >&times;</span
         >
-          <button
-            type="submit"
-            onclick="confirmDelete('{{storage[0]}}')"
-            style="background-color: red"
-          >
-            Delete
-          </button>
-        </form>
-        <a href="/admin/edit/{{storage[0]}}">Edit</a>
-      </td>
-    </tr>
-    {%endfor%}
-  </table>
+        <strong style="color: rgb(37, 98, 69)">Success! {{message}}</strong>
+      </div>
+      {%endfor%} {%endif %} {%endwith%}
+      <button
+      style="
+      width: fit-content !important;
+        padding: 12px;
+        background-color: #D4AF37; 
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        margin: 20px auto; 
+        font-family: 'Oswald', sans-serif;"
+        onclick="window.location.href='/admin/add'"
+      >
+        Add new product &plus;
+      </button>
+    </div>
+    <table>
+      <tr class="table-header">
+        <th>Product</th>
+        <th>Detail</th>
+        <th>Action</th>
+      </tr>
+      {%for storage in storages%}
+      <tr>
+        <td class="col1">
+          <div class="cart-info">
+            <img src="{{storage[5]}}" />
+            <p>{{storage[1]}}</p>
+          </div>
+        </td>
+        <td class="col2">
+          <div class="cart-detail">
+            <p>Rating: {{storage[3]}}</p>
+            <small>Price: {{storage[6]}}</small>
+            <br />
+            <small>Brand: <strong>{{storage[2]}}</strong></small>
+            <br />
+          </div>
+        </td>
+        <td class="col3">
+          <div class="cart-action">
+            <form
+              id="delete-form-{{storage[0]}}"
+              action="/admin/delete/{{storage[0]}}"
+              method="post"
+            >
+              <button
+                type="submit"
+                onclick="confirmDelete('{{storage[0]}}')"
+                style="background-color: red"
+              >
+                Delete
+              </button>
+            </form>
+            <a href="/admin/edit/{{storage[0]}}">Edit</a>
+          </div>
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
 </div>
 <script>
   function confirmDelete(storageID) {

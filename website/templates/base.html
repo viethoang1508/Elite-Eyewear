@@ -39,7 +39,9 @@
             {% endif %}
         </ul>
         <div class="cart">
-            <img src="{{ url_for('static', filename='images/shopping-cart.svg') }}" alt="Shop Logo">
+            <a href="/cart">
+                <img src="{{ url_for('static', filename='images/shopping-cart.svg') }}" alt="Shop Logo">
+            </a>
         </div>
     </div>
 </div>
