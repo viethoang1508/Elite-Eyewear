@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 import sqlite3
 admin = Blueprint("admin", __name__)
 
-sqldbname = 'GUITAR.db'
+sqldbname = 'Elite_Eyewear.db'
 
 @admin.route('/')
 def index():

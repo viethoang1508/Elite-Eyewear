@@ -12,7 +12,7 @@ def generate_random_numbers():
 
 
 
-sqldbname = 'GUITAR.db'
+sqldbname = 'Elite_Eyewear.db'
 @views.context_processor
 def my_utility_processor():
     def convert_currency_to_int(currency_str):

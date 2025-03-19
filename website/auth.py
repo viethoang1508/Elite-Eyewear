@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 import sqlite3
 auth = Blueprint("auth", __name__)
 
-sqldbname = 'GUITAR.db'
+sqldbname = 'Elite_Eyewear.db'
 
 def SaveToDB(name,email,password):
     conn = sqlite3.connect(sqldbname)
