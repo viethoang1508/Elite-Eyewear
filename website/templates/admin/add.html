@@ -1,5 +1,12 @@
-{%extends "admin/base.html"%}{% block title%}MNN | Cart{%endblock%} {% block
-content%}
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add.css') }}">
+
+{% endblock %}
+{% block content%}
 <div class="small-container">
   <h1>Add new product to the storage</h1>
   <form action="/admin/add" method="post">
@@ -23,10 +30,11 @@ content%}
       cols="30"
       rows="10"
     ></textarea>
+    <br>
     <button
       type="submit"
       style="width: 200px; height: 40px; cursor: pointer"
-      class="btn"
+      class="btn-add"
     >
       Add
     </button>
