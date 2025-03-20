@@ -1,4 +1,12 @@
-{%extends "base.html" %} {% block title%}MNN{%endblock%} {% block content%}
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/orders.css') }}">
+
+{% endblock %}
+{% block content%}
 <div class="small-container cart-page" style="min-height: 70vh">
   <h1>Order Details - Order ID: {{ order[0] }}</h1>
   <p>Status : {{ order[3]}}</p>

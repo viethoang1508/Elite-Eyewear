@@ -206,7 +206,7 @@
 
     allProducts.forEach((product) => {
       const col = document.createElement("div");
-      col.classList.add("col-4");
+      col.classList.add("col-4", "product_card"); // Đảm bảo có class CSS
 
       const link = document.createElement("a");
       link.href = `/product_detail/${product[0]}`;

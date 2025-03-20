@@ -1,0 +1,88 @@
+.small-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.cart-page h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #D4AF37;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.btn-logout:hover {
+    background-color: #B8902E;
+    transform: scale(1.1);
+}
+
+.alert {
+    width: 80%;
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: left;
+    position: relative;
+}
+
+.closebtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #256245;
+}
+
+.closebtn:hover{
+    background-color: #B8902E;
+    transform: scale(1.1);
+}
+
+.cart {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.cart th, .cart td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.cart th {
+    background: #D4AF37;
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    font-size: 18px;
+}
+
+.cart tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.cart tr:hover {
+    background: #f1f1f1;
+}
+
+.cart a {
+    color: #e76f51;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cart a:hover {
+    text-decoration: underline;
+}
