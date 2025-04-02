@@ -20,25 +20,66 @@
         <strong style="color: rgb(37, 98, 69)">Success! {{message}}</strong>
       </div>
       {%endfor%} {%endif %} {%endwith%}
-      <button
-      style="
-      width: fit-content !important;
-        padding: 12px;
-        background-color: #D4AF37; 
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s ease-in-out;
-        margin: 20px auto; 
-        font-family: 'Oswald', sans-serif;"
-        onclick="window.location.href='/admin/add'"
-      >
-        Add new product &plus;
-      </button>
+      <div class="grp-control-button">
+        <button
+        style="
+        width: fit-content !important;
+          padding: 12px;
+          background-color: #D4AF37;
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s ease-in-out;
+          margin: 20px auto;
+          font-family: 'Oswald', sans-serif;"
+          onclick="window.location.href='/admin/add'"
+        >
+          Add new product &plus;
+        </button>
+        <button
+        style="
+        width: fit-content !important;
+          padding: 12px;
+          background-color: #D4AF37;
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s ease-in-out;
+          margin: 20px auto;
+          font-family: 'Oswald', sans-serif;"
+          onclick="window.location.href='/admin/contacts'"
+        >
+          See User's Contacts &plus;
+        </button>
+
+        <button
+        style="
+        width: fit-content !important;
+          padding: 12px;
+          background-color: #D4AF37;
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s ease-in-out;
+          margin: 20px auto;
+          font-family: 'Oswald', sans-serif;"
+          onclick="window.location.href='/admin/orders'"
+        >
+          See User's Orders &plus;
+        </button>
+      </div>
     </div>
     <table>
       <tr class="table-header">

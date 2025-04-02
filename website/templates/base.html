@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title%}{%endblock%}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
@@ -15,76 +15,85 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
 
- <body class="{% block body_class %}{% endblock %}">
+  <body class="{% block body_class %}{% endblock %}">
     <div class="header">
-    <div class="header_p1">
+      <div class="header_p1">
         <div class="logo">
-            <img src="{{ url_for('static', filename='images/shop-logo.png') }}" alt="Shop Logo">
+          <img src="{{ url_for('static', filename='images/shop-logo.png') }}" alt="Shop Logo">
         </div>
         <div class="shop_name">
-            <h1>Elite Eyewear</h1>
+          <h1>Elite Eyewear</h1>
         </div>
-    </div>
+      </div>
 
-    <div class="header_p2">
+      <div class="header_p2">
         <ul class="nav nav-underline">
-            <li class="nav-item"><a class="nav-link" href="/">HOME</a></li>
-            <li class="nav-item"><a class="nav-link" href="/all_products">PRODUCTS</a></li>
-            <li class="nav-item"><a class="nav-link" href="/about">ABOUT</a></li>
-            <li class="nav-item"><a class="nav-link" href="/contact">CONTACT</a></li>
-            {% if user_name %}
-                <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+          <li class="nav-item"><a class="nav-link" href="/">HOME</a></li>
+          <li class="nav-item"><a class="nav-link" href="/all_products">PRODUCTS</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">ABOUT</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact">CONTACT</a></li>
+          {% if user_name %}
+            <!-- Nếu là admin, hiển thị "Admin" và thêm "Dashboard" -->
+            {% if is_admin %}
+              <li class="nav-item"><a class="nav-link" href="/admin">DASHBOARD</a></li>
+              <li class="nav-item"><a class="nav-link" href="/account">Admin</a></li>
             {% else %}
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+              <!-- Nếu là user, hiển thị tên người dùng -->
+              <li class="nav-item"><a class="nav-link" href="/account">{{ user_name }}</a></li>
             {% endif %}
+          {% else %}
+            <!-- Nếu chưa đăng nhập, hiển thị "Login" -->
+            <li class="nav-item"><a class="nav-link" href="/login">LOGIN</a></li>
+          {% endif %}
         </ul>
         <div class="cart">
-            <a href="/cart">
-                <img src="{{ url_for('static', filename='images/shopping-cart.svg') }}" alt="Shop Logo">
-            </a>
+          <a href="/cart">
+            <img src="{{ url_for('static', filename='images/shopping-cart.svg') }}" alt="Shop Logo">
+          </a>
         </div>
+      </div>
     </div>
-</div>
 
-    {% block content%} {% endblock %}
-<!--    Footer -->
+    {% block content %} {% endblock %}
+
+    <!-- Footer -->
     <div class="footer">
-        <div class="footer_col_part">
-            <div class="footer-col-1">
-                <img src="{{ url_for('static', filename='images/shop-logo.png') }}" alt="Shop Logo">
-
-            </div>
-            <div class="footer-col-2">
-                <h3>Quick Link</h3>
-                    <ul>
-                      <li>Privacy Policy</li>
-                      <li>Terms Of Use</li>
-                      <li>FAQ</li>
-                      <li>Contact</li>
-                    </ul>
-            </div>
-            <div class="footer-col-3">
-                <h3>Follow Us</h3>
-                <ul>
-                    <li>Facebook</li>
-                    <li>Twitter</li>
-                    <li>Instagram</li>
-                    <li>Youtube</li>
-                </ul>
-            </div>
-            <div class="footer-col-4">
-                <h3>Download Our App</h3>
-                <p>Download App for Android and ios mobile phone.</p>
-                <div class="dowload_pic">
-                    <img src="{{ url_for('static', filename='images/app-store-badge.png') }}" alt="Shop Logo">
-                    <img src="{{ url_for('static', filename='images/google-play-badge.png') }}" alt="Shop Logo">
-                </div>
-            </div>
+      <div class="footer_col_part">
+        <div class="footer-col-1">
+          <img src="{{ url_for('static', filename='images/shop-logo.png') }}" alt="Shop Logo">
         </div>
-        <div class="footer_line_part">
-            <p class="copyright">Copyright 2024 - MNN Guitar.</p>
+        <div class="footer-col-2">
+          <h3>Quick Link</h3>
+          <ul>
+            <li>Privacy Policy</li>
+            <li>Terms Of Use</li>
+            <li>FAQ</li>
+            <li>Contact</li>
+          </ul>
         </div>
+        <div class="footer-col-3">
+          <h3>Follow Us</h3>
+          <ul>
+            <li>Facebook</li>
+            <li>Twitter</li>
+            <li>Instagram</li>
+            <li>Youtube</li>
+          </ul>
+        </div>
+        <div class="footer-col-4">
+          <h3>Download Our App</h3>
+          <p>Download App for Android and ios mobile phone.</p>
+          <div class="dowload_pic">
+            <img src="{{ url_for('static', filename='images/app-store-badge.png') }}" alt="Shop Logo">
+            <img src="{{ url_for('static', filename='images/google-play-badge.png') }}" alt="Shop Logo">
+          </div>
+        </div>
+      </div>
+      <div class="footer_line_part">
+        <p class="copyright">Copyright 2024 - MNN Guitar.</p>
+      </div>
     </div>
 
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'929cdae20847207c',t:'MTc0MzU2MDUwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
   </body>
 </html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="small-container">
+<div class="container mt-5">
+    <h1>Reply Contact</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h4>Contact information</h4>
+    <p><strong>Name:</strong> {{ contact[1] }}</p>
+    <p><strong>Phone Number:</strong> {{ contact[2] }}</p>
+    <p><strong>Email:</strong> {{ contact[3] }}</p>
+    <p><strong>Message:</strong> {{ contact[4] }}</p>
+
+    <h4>Respond via email</h4>
+    <form method="POST">
+        <div class="form-group">
+            <label for="subject">Title:</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="body">Content:</label>
+            <textarea class="form-control" id="body" name="body" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <a href="{{ url_for('admin.admin_contacts') }}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+</div>
+{% endblock %}

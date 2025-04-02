@@ -1,141 +1,123 @@
 from flask import Blueprint, jsonify, render_template, request, session, flash, redirect, url_for
 import sqlite3
-views = Blueprint("views", __name__)
 import random
+from .utils import convert_currency_to_int
 
-def generate_random_numbers():
-    # Sinh ra 4 số ngẫu nhiên trong khoảng từ 1 đến 12
-    random_numbers = [random.randint(1, 12) for _ in range(4)]
-    return random_numbers
-
-# Sử dụng hàm để sinh ra 4 số ngẫu nhiên
-
-
+views = Blueprint("views", __name__)
 
 sqldbname = 'Elite_Eyewear.db'
-@views.context_processor
-def my_utility_processor():
-    def convert_currency_to_int(currency_str):
-        currency_str = currency_str.replace("$", "").replace(".", "")
-        return int(currency_str)
-    def convert_int_to_currency(number):
-        number_str = str(number)
-        currency_str = ""
-        count = 0
 
-        for digit in reversed(number_str):
-            if count != 0 and count % 3 == 0:
-                currency_str = "." + currency_str
-            currency_str = digit + currency_str
-            count += 1
+# Hàm tiện ích để lấy current_username
+def get_current_username():
+    return session['current_user']['name'] if 'current_user' in session else ""
 
-        currency_str = "$" + currency_str
-        return currency_str
-    return dict(convert_currency_to_int=convert_currency_to_int, convert_int_to_currency=convert_int_to_currency)
+def generate_random_numbers():
+    return [random.randint(1, 12) for _ in range(4)]
 
 @views.route('/')
 def home():
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    conn = sqlite3.connect(sqldbname)
-    cursor = conn.cursor()
-    sqlcommand = 'SELECT * FROM GUITAR LIMIT 0, 4'
-    cursor.execute(sqlcommand)
-    featuresProduct = cursor.fetchall()
-    sqlcommand = 'SELECT * FROM GUITAR LIMIT 4, 10'
-    cursor.execute(sqlcommand)
-    latestProducts = cursor.fetchall()
-    return render_template('home.html', featuresProduct=featuresProduct, latestProducts=latestProducts,user_name = current_username)
+    current_username = get_current_username()
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM eyeglasses LIMIT 0, 4')
+            featuresProduct = cursor.fetchall()
+            cursor.execute('SELECT * FROM eyeglasses LIMIT 4, 10')
+            latestProducts = cursor.fetchall()
+    except sqlite3.Error as e:
+        flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+        return redirect(url_for("views.home"))
+    return render_template('home.html', featuresProduct=featuresProduct, latestProducts=latestProducts,
+                           user_name=current_username)
 
 @views.route('/cart', methods=['GET'])
 def shopping_cart():
-    current_username = ""
-    current_cart = []
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    if 'cart' in session:
-        current_cart = session.get('cart', [])
-
-    return render_template('cart.html', cart=current_cart,user_name = current_username)
+    current_username = get_current_username()
+    current_cart = session.get('cart', [])
+    return render_template('cart.html', cart=current_cart, user_name=current_username)
 
 @views.route('/all_products')
 def all_products():
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    conn = sqlite3.connect(sqldbname)
-    cursor = conn.cursor()
-    sqlcommand = 'SELECT * FROM GUITAR'
-    cursor.execute(sqlcommand)
-    all_products = cursor.fetchall()
-    return render_template('all_products.html', all_products=all_products,user_name = current_username)
+    current_username = get_current_username()
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM eyeglasses')
+            all_products = cursor.fetchall()
+    except sqlite3.Error as e:
+        flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+        return redirect(url_for("views.home"))
+    return render_template('all_products.html', all_products=all_products, user_name=current_username)
 
 @views.route('/product_detail/<id>')
 def product_detail(id):
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    conn = sqlite3.connect(sqldbname)
-    cursor = conn.cursor()
-    sqlcommand = 'SELECT * FROM GUITAR WHERE id = ?'
-    cursor.execute(sqlcommand, (id,))
-    product_detail = cursor.fetchone()
-    random_numbers = generate_random_numbers()
-    sqlcommand = 'SELECT * FROM GUITAR where id in (?,?,?,?)'
-    cursor.execute(sqlcommand,(random_numbers[0],random_numbers[1],random_numbers[2],random_numbers[3]))
-    related_products = cursor.fetchall()
-    return render_template('product_detail.html', product_detail=product_detail, related_products=related_products, user_name = current_username)
+    current_username = get_current_username()
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM eyeglasses WHERE id = ?', (id,))
+            product_detail = cursor.fetchone()
+            if not product_detail:
+                flash("Sản phẩm không tồn tại.", "error")
+                return redirect(url_for("views.all_products"))
+            random_numbers = generate_random_numbers()
+            cursor.execute('SELECT * FROM eyeglasses WHERE id IN (?,?,?,?)',
+                           (random_numbers[0], random_numbers[1], random_numbers[2], random_numbers[3]))
+            related_products = cursor.fetchall()
+    except sqlite3.Error as e:
+        flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+        return redirect(url_for("views.all_products"))
+    return render_template('product_detail.html', product_detail=product_detail, related_products=related_products,
+                           user_name=current_username)
 
 @views.route('/about')
 def about():
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    return render_template('about.html' ,user_name = current_username)
-
+    current_username = get_current_username()
+    return render_template('about.html', user_name=current_username)
 
 @views.route('/contact', methods=['GET', 'POST'])
 def contact():
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
+    current_username = get_current_username()
     if request.method == 'POST':
         Name = request.form['Name']
         Tel = request.form['Tel']
         Email = request.form['Email']
         Message = request.form['message']
-        conn = sqlite3.connect(sqldbname)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO Contact (Name, Tel, Email, Messages) VALUES(?,?,?,?)", (Name, Tel, Email, Message))
-        conn.commit()
-        conn.close()
-        flash("Thank you for your feedback", "success")
-        return redirect(url_for('views.contact'))
-    return render_template('contact.html',user_name = current_username)
+        try:
+            with sqlite3.connect(sqldbname) as conn:
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO Contact (Name, Tel, Email, Messages) VALUES (?, ?, ?, ?)",
+                               (Name, Tel, Email, Message))
+                conn.commit()
+            flash("Thank you for your feedback", "success")
+            return redirect(url_for('views.contact'))
+        except sqlite3.Error as e:
+            flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+            return render_template('contact.html', user_name=current_username)
+    return render_template('contact.html', user_name=current_username)
 
 @views.route('/cart/add', methods=['POST'])
 def addToCart():
     productId = request.form['product_id']
-    quantity = int(request.form['quantity'])
-    conn = sqlite3.connect(sqldbname)
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT product, price, picture FROM GUITAR WHERE id = ?", (productId,))
-    product = cursor.fetchone()
-    conn.close()
+    try:
+        quantity = int(request.form['quantity'])
+        if quantity <= 0:
+            raise ValueError("Số lượng phải lớn hơn 0.")
+    except (ValueError, KeyError) as e:
+        flash(f"Lỗi: {str(e)}", "error")
+        return redirect(url_for('views.product_detail', id=productId))
+
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT product, price, picture FROM eyeglasses WHERE id = ?", (productId,))
+            product = cursor.fetchone()
+            if not product:
+                raise ValueError("Sản phẩm không tồn tại.")
+    except (sqlite3.Error, ValueError) as e:
+        flash(f"Lỗi: {str(e)}", "error")
+        return redirect(url_for('views.product_detail', id=productId))
+
     product_detail = {
         "id": productId,
         "name": product[0],
@@ -156,165 +138,190 @@ def addToCart():
     flash('Item added successfully!', 'success')
     return redirect(url_for('views.product_detail', id=productId))
 
-@views.route('/cart/update',methods = ['POST'])
+@views.route('/cart/update', methods=['POST'])
 def CartUpdate():
     cart = session.get('cart', [])
     new_cart = []
     for row in cart:
         productId = int(row['id'])
         if f'quantity-{productId}' in request.form:
-            quantity = int(request.form[f'quantity-{productId}'])
-            if quantity == 0 or f'delete-{productId}' in request.form:
-                continue
-            row['quantity'] = quantity
+            try:
+                quantity = int(request.form[f'quantity-{productId}'])
+                if quantity < 0:
+                    raise ValueError("Số lượng không thể âm.")
+                if quantity == 0 or f'delete-{productId}' in request.form:
+                    continue
+                row['quantity'] = quantity
+            except ValueError as e:
+                flash(f"Lỗi: {str(e)}", "error")
+                return redirect(url_for('views.shopping_cart'))
         new_cart.append(row)
     session['cart'] = new_cart
     return redirect(url_for('views.shopping_cart'))
 
-@views.route('/proceed_cart',methods = ['POST'] )
+@views.route('/proceed_cart', methods=['POST'])
 def proceed_cart():
-    if 'current_user' in session:
-        user_id = session['current_user']['id']
-        user_email = session['current_user']['email']
-        if 'cart' in session:
-            current_cart = session.get("cart",[])
-            if current_cart is not []:
-                conn = sqlite3.connect(sqldbname)
-                cur = conn.cursor()
-                status = 1
-                cur.execute('INSERT INTO "order" (user_id, user_email,status) VALUES(?, ?, ?)',(user_id,user_email,status))
-                order_id = cur.lastrowid
-                for product in current_cart:
-                    product_id = product['id']
-                    price = product['price']
-                    quantity = product['quantity']
-                    cur.execute('INSERT or REPLACE INTO "order_details" (order_id, product_id, price, quantity) VALUES(?,?,?,?)',(order_id,product_id,price,quantity))  
-                conn.commit()
-                conn.close()
-                if 'cart' in session:
-                    current_cart = session.pop("cart",[])
-                flash(f'Your order has been successfully created: orderID: {order_id}')
-                return redirect(url_for("views.account"))  
-        flash("There is nothing in cart. Let's add some!", "info")
-        return redirect(url_for("views.all_products"))
-    flash("You are not logged in. Please login", "error")
-    return redirect(url_for("auth.login"))
-    
+    if 'current_user' not in session:
+        flash("Bạn cần đăng nhập để tiếp tục.", "error")
+        return redirect(url_for("auth.login"))
 
-@views.route('/account/',methods = ['GET'])
+    if 'cart' not in session or not session['cart']:
+        flash("Giỏ hàng trống. Hãy thêm sản phẩm!", "info")
+        return redirect(url_for("views.all_products"))
+
+    return render_template('checkout.html', cart=session['cart'], user_name=session['current_user']['name'])
+
+@views.route('/process-checkout', methods=['POST'])
+def process_checkout():
+    if 'current_user' not in session:
+        flash("Bạn cần đăng nhập để tiếp tục.", "error")
+        return redirect(url_for("auth.login"))
+
+    if 'cart' not in session or not session['cart']:
+        flash("Giỏ hàng trống.", "error")
+        return redirect(url_for("views.shopping_cart"))
+
+    # Lấy thông tin từ form
+    name = request.form['name']
+    address = request.form['address']
+    phone = request.form['phone']
+    payment_method = request.form['payment_method']
+
+    # Lấy thông tin người dùng từ session
+    user_id = session['current_user']['id']
+    user_email = session['current_user']['email']
+    current_cart = session.get("cart", [])
+
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            conn.execute('PRAGMA busy_timeout = 30000')  # Tăng thời gian chờ lên 30 giây
+            cur = conn.cursor()
+            status = 1  # Đơn hàng đang chờ xử lý
+            cur.execute(
+                'INSERT INTO "order" (user_id, user_email, status) VALUES (?, ?, ?)',
+                (user_id, user_email, status)
+            )
+            order_id = cur.lastrowid  # Lấy ID của đơn hàng vừa tạo
+
+            # Lưu chi tiết đơn hàng vào bảng `order_details`
+            for product in current_cart:
+                product_id = product['id']
+                price = product['price']
+                quantity = product['quantity']
+                price_value = convert_currency_to_int(price) if isinstance(price, str) else price
+                cur.execute(
+                    'INSERT INTO "order_details" (order_id, product_id, price, quantity, shipping_name, shipping_address, shipping_phone, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    (order_id, product_id, price_value, quantity, name, address, phone, payment_method)
+                )
+
+            conn.commit()
+
+    except sqlite3.OperationalError as e:
+        flash(f"Lỗi cơ sở dữ liệu: {str(e)}. Vui lòng thử lại sau.", "error")
+        return redirect(url_for("views.shopping_cart"))
+
+    # Xóa giỏ hàng sau khi đặt hàng thành công
+    session.pop('cart', None)
+
+    # Hiển thị thông báo thành công
+    flash(f"Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: {order_id}", "success")
+    return redirect(url_for("views.account"))
+
+@views.route('/account/', methods=['GET'])
 def account():
     user_orders = []
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    user_id = session.get('current_user',{}).get('id')
+    current_username = get_current_username()
+    user_id = session.get('current_user', {}).get('id')
     if user_id:
-        conn = sqlite3.connect(sqldbname)
-        cur = conn.cursor()
-        cur.execute('Select * from "order" where user_id = ?',(user_id,))
-        user_orders = cur.fetchall()
-        conn.close()
-        return render_template('account.html',orders = user_orders, user_name = current_username)
+        try:
+            with sqlite3.connect(sqldbname) as conn:
+                cur = conn.cursor()
+                cur.execute('SELECT * FROM "order" WHERE user_id = ?', (user_id,))
+                user_orders = cur.fetchall()
+        except sqlite3.Error as e:
+            flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+            return redirect(url_for("auth.login"))
+        return render_template('account.html', orders=user_orders, user_name=current_username)
     flash("User not logged in")
     return redirect(url_for("auth.login"))
 
-@views.route('/order/', defaults={'order_id':None}, methods = ['GET'])
-@views.route('/order/<int:order_id>/', methods = ['GET'])
+@views.route('/order/', defaults={'order_id': None}, methods=['GET'])
+@views.route('/order/<int:order_id>/', methods=['GET'])
 def order(order_id):
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
-    user_id = session.get('current_user',{}).get('id')
+    current_username = get_current_username()
+    user_id = session.get('current_user', {}).get('id')
     if user_id:
-        conn = sqlite3.connect(sqldbname)
-        cur = conn.cursor()
-        if order_id is not None:
-            cur.execute('Select * from "order" where id = ? and user_id = ?',(order_id,user_id))
-            order = cur.fetchone()
-            cur.execute('SELECT product_id, product,order_details.price ,quantity from order_details inner join GUITAR on GUITAR.id = order_details.product_id where order_id = ?',(order_id,))
-            order_details = cur.fetchall()
-            conn.close()
-            return render_template('orders.html',order = order,order_details = order_details, user_name = current_username)
-        else:
-            cur.execute('Select * from "order" where user_id = ?',(user_id,))
-            user_orders = cur.fetchall()
-            if not user_orders:
-                user_orders = None
-            conn.close()
-            return render_template('account.html',orders = user_orders, user_name = current_username)
+        try:
+            with sqlite3.connect(sqldbname) as conn:
+                cur = conn.cursor()
+                if order_id is not None:
+                    cur.execute('SELECT * FROM "order" WHERE id = ? AND user_id = ?', (order_id, user_id))
+                    order = cur.fetchone()
+                    if not order:
+                        flash("Đơn hàng không tồn tại hoặc không thuộc về bạn.", "error")
+                        return redirect(url_for("views.account"))
+                    cur.execute(
+                        'SELECT product_id, product, order_details.price, quantity FROM order_details INNER JOIN eyeglasses ON eyeglasses.id = order_details.product_id WHERE order_id = ?',
+                        (order_id,)
+                    )
+                    order_details = cur.fetchall()
+                    return render_template('orders.html', order=order, order_details=order_details,
+                                           user_name=current_username)
+                else:
+                    cur.execute('SELECT * FROM "order" WHERE user_id = ?', (user_id,))
+                    user_orders = cur.fetchall()
+                    if not user_orders:
+                        user_orders = None
+                    return render_template('account.html', orders=user_orders, user_name=current_username)
+        except sqlite3.Error as e:
+            flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+            return redirect(url_for("views.account"))
     flash("User not logged in")
     return redirect(url_for("auth.login"))
 
 @views.route('/all-product', methods=['GET'])
 def get_all_products():
-    # Lấy giá trị của phương thức lọc từ yêu cầu
     filter_by = request.args.get('filter')
-    conn = sqlite3.connect(sqldbname)
-    cursor = conn.cursor()
-    
-    # Xử lý logic lọc sản phẩm ở đây
-    # Ví dụ: nếu filter_by là 'brand', thực hiện truy vấn SQL để lấy sản phẩm theo brand
-    match filter_by:
-        case "Default Sort":
-            sqlcommand = ("select * from GUITAR")
-        case "Sort By Price":
-            sqlcommand = ("select * from GUITAR ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT)")
-        case "Sort By Price DESC":
-            sqlcommand = ("select * from GUITAR ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT) DESC")
-        case "Sort By Rating":
-            sqlcommand = ("select * from GUITAR ORDER BY rating DESC")
-        case "Sort By Brand":        
-            sqlcommand = ("select * from GUITAR ORDER BY brand")
-    cursor.execute(sqlcommand)
-    data = cursor.fetchall()
-    # Giả sử products là danh sách sản phẩm sau khi lọc
-    
-    
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            match filter_by:
+                case "Default Sort":
+                    sqlcommand = "SELECT * FROM eyeglasses"
+                case "Sort By Price":
+                    sqlcommand = "SELECT * FROM eyeglasses ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT)"
+                case "Sort By Price DESC":
+                    sqlcommand = "SELECT * FROM eyeglasses ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT) DESC"
+                case "Sort By Rating":
+                    sqlcommand = "SELECT * FROM eyeglasses ORDER BY rating DESC"
+                case "Sort By Brand":
+                    sqlcommand = "SELECT * FROM eyeglasses ORDER BY brand"
+                case _:
+                    sqlcommand = "SELECT * FROM eyeglasses"
+            cursor.execute(sqlcommand)
+            data = cursor.fetchall()
+    except sqlite3.Error as e:
+        return jsonify({"error": f"Lỗi cơ sở dữ liệu: {str(e)}"}), 500
     return jsonify(data)
-
-
-# @views.route("/sort-form", methods=["POST"])
-# def process_sort_form():
-#     selected_option = request.form.get('sort-dropdown')
-#     conn = sqlite3.connect(sqldbname)
-#     cursor = conn.cursor()
-#     match selected_option:
-#         case "Default Sort":
-#             sqlcommand = ("select * from GUITAR")
-#         case "Sort By Price":
-#             sqlcommand = ("select * from GUITAR ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT)")
-#         case "Sort By Price DESC":
-#             sqlcommand = ("select * from GUITAR ORDER BY CAST(REPLACE(REPLACE(price, '$', ''), '.', '') AS INT) DESC")
-#         case "Sort By Rating":
-#             sqlcommand = ("select * from GUITAR ORDER BY rating DESC")
-#         case "Sort By Brand":        
-#             sqlcommand = ("select * from GUITAR ORDER BY brand")
-#     cursor.execute(sqlcommand)
-#     data = cursor.fetchall()
-#     conn.close()
-#     return render_template('all_products.html', all_products=data)
 
 @views.route('/search', methods=['POST'])
 def search():
-    current_username = ""
-    if 'current_user' in session:
-        current_username = session['current_user']['name']
-    else:
-        current_username = ""
+    current_username = get_current_username()
     search_text = request.form['searchInput']
     if search_text == "":
         flash("You must add some text", "error")
-    if search_text != None:
-        flash(search_text, 'success')
-        conn = sqlite3.connect(sqldbname)
-        cursor = conn.cursor()
-        sqlcommand = (
-            "select * from GUITAR where product like '%") + search_text + "%'"
-        cursor.execute(sqlcommand)
-        data = cursor.fetchall()
-        conn.close()
-    return render_template('all_products.html', search_text=search_text, all_products=data, user_name = current_username)
+        return render_template('all_products.html', search_text=search_text, all_products=[],
+                               user_name=current_username)
+
+    try:
+        with sqlite3.connect(sqldbname) as conn:
+            cursor = conn.cursor()
+            sqlcommand = "SELECT * FROM eyeglasses WHERE product LIKE ?"
+            cursor.execute(sqlcommand, ('%' + search_text + '%',))
+            data = cursor.fetchall()
+    except sqlite3.Error as e:
+        flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
+        return render_template('all_products.html', search_text=search_text, all_products=[],
+                               user_name=current_username)
+    flash(search_text, 'success')
+    return render_template('all_products.html', search_text=search_text, all_products=data, user_name=current_username)

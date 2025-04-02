@@ -59,3 +59,11 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
     background-color: white;
 }
+
+/* CSS cho các nút đầu trang */
+.grp-control-button {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}

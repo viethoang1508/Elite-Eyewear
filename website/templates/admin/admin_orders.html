@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_contacts.css') }}">
+
+{% endblock %}
+{%block content%}
+<div class="admin-orders">
+    <h1>Orders List</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if orders %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User ID</th>
+                    <th>Email</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order[0] }}</td>
+                        <td>{{ order[1] }}</td>
+                        <td>{{ order[2] }}</td>
+
+                        <td>
+                            <p><strong>Receiver:</strong> {{ order_details[order[0]][0][4] }}</p>
+                            <p><strong>Address:</strong> {{ order_details[order[0]][0][5] }}</p>
+                            <p><strong>Phone Number:</strong> {{ order_details[order[0]][0][6] }}</p>
+                            <p><strong>Pay Method:</strong> {{ order_details[order[0]][0][7] }}</p>
+                            <h4>Products</h4>
+                            <ul>
+                                {% for detail in order_details[order[0]] %}
+                                    <li>
+                                        Product: {{ detail[1] }} - Price: {{ convert_int_to_currency(detail[2]) }} - Số lượng: {{ detail[3] }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Orders.</p>
+    {% endif %}
+    <a href="{{ url_for('admin.index') }}">Back to Dashboard</a>
+</div>
+{%endblock%}

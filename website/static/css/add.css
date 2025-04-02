@@ -66,13 +66,22 @@ textarea:focus {
 a {
     display: block;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 15px !important;
     font-size: 16px;
     text-decoration: none;
     color: #e69b00;
     font-weight: bold;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 a:hover {
     color: #b37300;
+}
+
+button {
+     width: fit-content;
+     margin: 0 auto !important;
+     font-family: 'Oswald', sans-serif !important;
+     background-color: #D4AF37 !important;
 }

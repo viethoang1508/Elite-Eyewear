@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_contacts.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-contacts">
+    <h1>Contacts List</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if contacts %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact[0] }}</td>
+                        <td>{{ contact[1] }}</td>
+                        <td>{{ contact[2] }}</td>
+                        <td>{{ contact[3] }}</td>
+                        <td>{{ contact[4] }}</td>
+                        <td>
+                            {% if contact[5] == 1 %}
+                                Responded
+                            {% else %}
+                                Not Responded
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if contact[5] == 0 %}
+                                <a href="{{ url_for('admin.reply_contact', contact_id=contact[0]) }}" class="btn btn-primary">Respond</a>
+                            {% else %}
+                                <span>Responded</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Contact.</p>
+    {% endif %}
+    <a href="{{ url_for('admin.index') }}">Back to Dashboard</a>
+</div>
+{% endblock %}
