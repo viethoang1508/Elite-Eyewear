@@ -5,12 +5,19 @@
 /*Feature Products*/
 .product_display_section .product_card img{
     width: 100%;
+    object-fit: cover;
 }
 .product_display_section .product_card{
     width: 23%;
     transition: transform 0.5s ease-in-out;
     border-radius: 10px;
     box-shadow: 5px 5px 10px lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+    align-items: center;
 }
 .product_display_section .product_display {
     display: flex;

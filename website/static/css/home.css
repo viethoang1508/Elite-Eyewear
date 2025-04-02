@@ -107,6 +107,12 @@
     transition: transform 0.5s ease-in-out;
     border-radius: 10px;
     box-shadow: 5px 5px 10px lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+    align-items: center;
 }
 .home_content .small-container .product_display {
     display: flex;

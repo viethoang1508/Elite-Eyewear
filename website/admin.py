@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 import sqlite3
 from functools import wraps
-from .utils import convert_currency_to_int  # Thêm import này
-
+from .utils import convert_currency_to_int
 from flask_mail import Message
-from flask import current_app  # Import current_app để truy cập app
+from flask import current_app
+
 admin = Blueprint("admin", __name__)
 
 sqldbname = 'Elite_Eyewear.db'
@@ -164,7 +164,7 @@ def admin_orders():
         flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
         return redirect(url_for("views.home"))
 
-    return render_template('admin/admin_orders.html', orders=orders_with_details, order_details=order_details, storages=storages)
+    return render_template('admin/admin_orders.html', orders=orders_with_details, order_details=order_details)  # Xóa storages
 
 @admin.route('/contacts', methods=['GET'])
 @admin_required
@@ -179,7 +179,7 @@ def admin_contacts():
         flash(f"Lỗi cơ sở dữ liệu: {str(e)}", "error")
         return redirect(url_for("views.home"))
 
-    return render_template('admin/admin_contacts.html', storages=storages)
+    return render_template('admin/admin_contacts.html', contacts=contacts)  # Xóa storages
 
 @admin.route('/reply/<int:contact_id>', methods=['GET', 'POST'])
 @admin_required
