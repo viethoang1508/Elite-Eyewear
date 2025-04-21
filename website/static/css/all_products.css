@@ -4,7 +4,8 @@
 }
 /*Feature Products*/
 .product_display_section .product_card img{
-    width: 100%;
+    width: 100% !important;
+    height: fit-content  !important;
     object-fit: cover;
 }
 .product_display_section .product_card{
@@ -41,5 +42,13 @@
 .small-container .product_display .row h2 {
     font-family: 'Oswald', sans-serif;
     color: #D4AF37;
+    text-align: center;
+}
+.detail {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
     text-align: center;
 }

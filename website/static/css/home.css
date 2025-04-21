@@ -100,7 +100,9 @@
 
 /*Feature Products*/
 .home_content .small-container .product_card img{
-    width: 100%;
+    width: 100% !important;
+    height: fit-content  !important;
+    object-fit: cover;
 }
 .home_content .small-container .product_card{
     width: 23%;
